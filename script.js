@@ -59,8 +59,18 @@ function initializeBoard() {
  * Finally, each cell on the board is going to be separated by a " " in between. This is again to improve visibility.
  */
 function printBoard() {
-    // code goes here
+    // This will provide the top dashed line to our board
+    console.log("--".repeat(BOARD_SIZE + 1))
+    for(let i = 0; i < BOARD_SIZE; i++){
+        let rowStr = "| ";
+        for(let j = 0; j < BOARD_SIZE; j++){
+            // If the cell is empty, we'll leave a space for visibility
+            rowStr += board[i][j] == 0 ? " " : board[i][j];
+            // This extra space will make our board less compact
+            rowStr += " ";
+        }
+        rowStr += "|"
+        console.log(rowStr);
+    }
+    console.log("--".repeat(BOARD_SIZE + 1));
 }
-
-initializeBoard();
-printBoard();
