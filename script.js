@@ -36,7 +36,7 @@ function initializeBoard() {
     // Since direction starts off as left, the snake should be facing left
     let head = { x: centerX, y: centerY };
     let snakeSegment1 = { x: centerX + 1, y: centerY };
-    let snakeSegment2 = { x: centerX + 1, y: centerY };
+    let snakeSegment2 = { x: centerX + 2, y: centerY };
     snake = [ head, snakeSegment1, snakeSegment2 ]
 
     // The snake is stored separately from the board, so we must update the board whenever the state of the snake changes
@@ -74,3 +74,6 @@ function printBoard() {
     }
     console.log("--".repeat(BOARD_SIZE + 1));
 }
+
+initializeBoard();
+printBoard();
