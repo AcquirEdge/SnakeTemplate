@@ -19,7 +19,32 @@ let apple;
  * There will be one randomly generated apple on the board
  */
 function initializeBoard() {
-    // code goes here
+    // Fill our board up with 0s before we begin with the snake
+    direction = "left";
+    for(let i = 0; i < BOARD_SIZE; i++){
+        let row = [];
+        for(let j = 0; j < BOARD_SIZE; j++){
+            row.push(EMPTY_CELL);
+        }
+        board.push(row);
+    }
+
+    // Get the starting coordinate values for our snake;
+    const centerX = Math.floor(BOARD_SIZE / 2);
+    const centerY = Math.floor(BOARD_SIZE / 2);
+
+    // Since direction starts off as left, the snake should be facing left
+    let head = { x: centerX, y: centerY };
+    let snakeSegment1 = { x: centerX + 1, y: centerY };
+    let snakeSegment2 = { x: centerX + 1, y: centerY };
+    snake = [ head, snakeSegment1, snakeSegment2 ]
+
+    // The snake is stored separately from the board, so we must update the board whenever the state of the snake changes
+    for(let segment of snake){
+        board[segment.y][segment.x] = SNAKE_BODY;
+    }
+
+    // Generate a random apple on the board
 }
 
 /**
@@ -36,3 +61,6 @@ function initializeBoard() {
 function printBoard() {
     // code goes here
 }
+
+initializeBoard();
+printBoard();
