@@ -135,6 +135,39 @@ function generateRandomApple(){
 }
 
 /**
+ * Function to help us retrieve and take care of the user's next move 
+ * 
+ * Make sure to import the 'readline' library and create an interface first
+ * 
+ * I've provided some guiding comments to help direct you in the correct direction
+ * 
+ */
+function getMove() {
+    // use readline's interface to ask retrieve the user's next move
+
+    // Depending on the user's answer, we change the snake's direction
+
+    // After changing the snake's direction leave a comment to simulate moving the snake forward
+    // We will take care of eating apples later on
+
+    // After all of this happens, make sure we print out our board, and recursively call this function again.
+}
+
+/**
+ * Function to help us change directions.
+ * Remember, the snake is not able to make a 180 degree turn in one single move, or else it will immediately bite itself.
+ * 
+ * Thus, we must make sure to prevent this from happening. I.e. if direction is left, we can't change to right.
+ * 
+ * @param {string} newDir - The direction we are attempting to switch to.
+ */
+
+function changeDirection(newDir){
+    // Use an if-else chain or switch statement to change the direction. 
+    // Should you use a switch statement, under each case you must implement a check to make sure the new direction works with the current direction
+}
+
+/**
  * Main function to run our game.
  * Place all the functions necessary to run the game (so far) into this function
  */
