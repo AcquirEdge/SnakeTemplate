@@ -1,3 +1,9 @@
+const readline = require('readline');
+let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
+
 // Define Constants and Global Variables
 const EMPTY_CELL = 0;
 const SNAKE_BODY = "X";
@@ -144,13 +150,18 @@ function generateRandomApple(){
  */
 function getMove() {
     // use readline's interface to ask retrieve the user's next move
+    rl.question("Input your next move (up, down, left, right, or nothing to move the snake forward): ", (answer) => {
+        // Depending on the user's answer, we change the snake's direction
+        changeDirection(answer);
+        // After changing the snake's direction leave a console.log to simulate moving the snake forward
+        // We will take care of eating apples later on
 
-    // Depending on the user's answer, we change the snake's direction
-
-    // After changing the snake's direction leave a comment to simulate moving the snake forward
-    // We will take care of eating apples later on
-
-    // After all of this happens, make sure we print out our board, and recursively call this function again.
+        console.log("moving snake forward");
+        // After all of this happens, make sure we print out our board, and recursively call this function again.
+        updateBoard();
+        printBoard();
+        getMove();
+    })
 }
 
 /**
@@ -165,6 +176,28 @@ function getMove() {
 function changeDirection(newDir){
     // Use an if-else chain or switch statement to change the direction. 
     // Should you use a switch statement, under each case you must implement a check to make sure the new direction works with the current direction
+    switch(newDir){
+        case "up":
+            if(direction !== "down"){
+                direction = "up";
+            }
+            break;
+        case "down":
+            if(direction !== "down"){
+                direction = "up";
+            }
+            break;
+        case "left":
+            if(direction !== "down"){
+                direction = "up";
+            }
+            break;
+        case "right": 
+            if(direction !== "down"){
+                direction = "up";
+            }
+            break;
+    }
 }
 
 /**
@@ -176,6 +209,7 @@ function main(){
     generateRandomApple();
     updateBoard();
     printBoard();
+    getMove();
 }
 
 main();
