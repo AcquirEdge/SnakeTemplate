@@ -264,25 +264,67 @@ function changeDirection(newDir){
 
 function moveSnake() {
     // Declare our return variable "result" and give it a default value of "continue".
+    let result = "continue";
     // Declare a temporary variable "lastMoved" that holds the last segment that has moved. The initial value will be the head of the snake.
     //      Reason: Once a segment moves, we need to keep track of where it was, or else the next segment doesn't know where to go to.
     //              Furthermore, after the snake finishes moving, this will hold the segment to be appended if the snake eats an apple.
+    let lastMoved = { ... snake[0] };
     // Depending on the current direction, adjust the snake head segment's x and y value. You may need to use a switch statement here
     // For each segment:
+    for(let i = 0; i < snake.length; i++){
         // If it is the first segment (head of the snake):
+        if(i === 0){
+            let newX = snake[i].x;
+            let newY = snake[i].y;
             // use a switch statement to adjust the head segment's x and y value.
+            switch (direction) {
+                case "up":
+                newY--;
+                break;
+                case "down":
+                newY++;
+                break;
+                case "right":
+                newX++;
+                break;
+                case "left":
+                newX--;
+                break;
+            }
+            snake[i].x = newX;
+            snake[i].y = newY;
         // Otherwise
+        } else {
             // Declare a temporary variable "tempCopy" to hold a copy of the current segment.
+            let tempCopy = { ... snake[i] };
             // Set the current segment equal to "lastMoved". This essentially moves the segment forward.
+            snake[i] = lastMoved;
             // Set "lastMoved" equal to "tempCopy". Thus, "lastMoved" now holds a temporary copy of the segment that just moved.
+            lastMoved = tempCopy;
+        }
+    }
     // If the snake's head has the same coordinates as the apple (We can't use the board to check it since the board can only hold one value at a time)
+    if(snake[0].x === apple.x && snake[0].y === apple.y){
         // Set "result" to "apple"
+        result = "apple";
         // Push "lastMoved" to the end of the snake array
+        snake.push(lastMoved);
     // Else, if the snake's head has coordinates that exceed our board
+    } else if(snake[0].x < 0 || snake[0].x >= BOARD_SIZE || snake[0].y < 0 || snake[0].y >= BOARD_SIZE) {
         // Set the "result" to "wall"
+        result = "wall";
     // Else, if the snake's head has coordinates that match one of its body parts
-        // Set the "result" to "bite"
+    } else {
+        for(let segment of snake.slice(1)){
+            if(snake[0].x === segment.x && snake[0].y === segment.y){
+                // Set the "result" to "bite"
+                result = "bite";
+                break;
+            }
+        }
+    }
     // Return "result"
+    return result;
 }
 
 /**
