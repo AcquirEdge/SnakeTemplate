@@ -165,11 +165,19 @@ function getMove() {
         changeDirection(answer);
         
         // Move the snake forward and save the result
+        let result = moveSnake();
 
         // If the snake lands on an apple, update board and generate a new apple
-        // We need to update the board first since generateRandomApple uses the state of the board
-
+        if(result === "apple"){
+            updateBoard();
+            generateRandomApple();
+        }
         // Else, if the snake bites itself or runs into a wall, print out "Loss"
+        else if(result === "bite" || result === "wall"){
+            console.log("LOSS");
+            rl.close();
+            return;
+        }
 
         // Otherwise, we just continue as normal.
         updateBoard();
