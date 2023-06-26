@@ -1,3 +1,8 @@
+import Segment from "./Segment.mjs";
+import Board from "./Board.mjs";
+import Apple from "./Apple.mjs";
+
+// ALTERATIONS: Use 'import' instead of 'require' since we are now in a '.mjs' file
 const readline = require('readline');
 let rl = readline.createInterface({
     input: process.stdin,
@@ -5,11 +10,13 @@ let rl = readline.createInterface({
 })
 
 // Define Constants and Global Variables
+// ALTERATIONS: Remove all but board size
 const EMPTY_CELL = 0;
 const SNAKE_BODY = "X";
 const APPLE_CELL = "A";
 const BOARD_SIZE = 20;
 
+// ALTERATION: board is now a new Board object instead of an empty array
 let board = [];
 let direction;
 
@@ -20,10 +27,11 @@ let apple;
 
 /**
  * Function to initialize our board to the initial position
- * The entire board should be filled with non-null values
  * 
- * The snake's direction will begin facing left
- * There will be one randomly generated apple on the board
+ * ALTERATIONS:
+ * - EDIT THIS function so that it no longer fills the board with non-null values.
+ * - Your Board class constructor will take care of this.
+ *  -Alter this function to utilize the Segment class.
  */
 function initializeBoard() {
     // Fill our board up with 0s before we begin with the snake
@@ -57,6 +65,11 @@ function initializeBoard() {
  * 3. Finally, we update the board with the new position of our apple
  * 
  * Our board should now have updated.
+ * 
+ * ALTERATIONS:
+ * - We are now setting cell values to null, not cells to 0
+ * - For each snake segment, set the board at that cell's value to the respective snake segment
+ * - Update the apple with the Apple Class 
  */
 function updateBoard(){
     // Clear our board
@@ -75,6 +88,8 @@ function updateBoard(){
 
 /**
  * Function to print the board out. This printBoard function will be a little more elaborate than that of 2048.
+ * 
+ * REMOVE THIS FUNCTION. This will now be a method of the board class.
  * 
  * The board should be boxed in with dashes on the top and bottom, and `|` on the sides, forming a box around the board
  * This is important, since if the snake touches a wall, the game should end. 
@@ -111,6 +126,11 @@ function printBoard() {
  * This means that in order to generate a new apple, you must either make sure that the apple is removed beforehand.
  * 
  * Instead of directly updating the board, we're going to utilize our updateBoard function to do so when we generate a new Apple
+ * 
+ * ALTERATIONS:
+ * - Remove the apple by setting the cell's value to null instead of EMPTY_CELL
+ * - Empty cells should be checking if the board cell's value is null instead of 0
+ * - Set apple to a new Apple object instead of the coordinate
  * 
  */
 function generateRandomApple(){
@@ -156,6 +176,9 @@ function generateRandomApple(){
  * If the snake landed on an apple, update the board and generate a new apple
  * If the snake was bitten or runs into a wall, Print out "Loss", close the readline interface, and return
  * Otherwise, don't do anything.
+ * 
+ * ALTERATIONS:
+ * - We are now using the Board class's printBoard method, not the function in this script
  * 
  */
 function getMove() {
@@ -263,6 +286,10 @@ function changeDirection(newDir){
  * So our function flow is going to look like this:
  * Move the head of the snake > Make all the other segments follow > We check the state of the game, and return the corresponding value.
  * 
+ * ALTERATIONS: 
+ * - utilize the clone() method for lastMoved and tempCopy
+ * - Use the Segment's head property to check if it is the snake's head Segment
+ * 
  * @returns {string} - The result of the move:
  *                  "apple": Snake ate an apple, 
  *                  "bite": Snake bites itself, 
@@ -338,6 +365,9 @@ function moveSnake() {
 /**
  * Main function to run our game.
  * Place all the functions necessary to run the game (so far) into this function
+ * 
+ * ALTERATIONS:
+ * - we are now using the Board class's printBoard method instead of the one in this script
  */
 function main(){
     initializeBoard();
