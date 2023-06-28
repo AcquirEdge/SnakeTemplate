@@ -11,7 +11,6 @@ let rl = readline.createInterface({
 
 // Define Constants and Global Variables
 // ALTERATIONS: Remove all but board size
-const EMPTY_CELL = 0;
 const SNAKE_BODY = "X";
 const APPLE_CELL = "A";
 const BOARD_SIZE = 20;
@@ -21,7 +20,7 @@ const BOARD_SIZE = 20;
 // - direction is set to an initial value of "left"
 
 let board = new Board(BOARD_SIZE);
-let direction = "left";
+let direction;
 
 // We need these global variables to help us keep track of where the snake and apple are at all times
 let snake = [];
@@ -37,6 +36,9 @@ let apple;
  * - Alter this function to utilize the Segment class.
  */
 function initializeBoard() {
+    // Set initial direction to left
+    direction = "left";
+
     // Get the starting coordinate values for our snake;
     const centerX = Math.floor(BOARD_SIZE / 2);
     const centerY = Math.floor(BOARD_SIZE / 2);
@@ -68,47 +70,15 @@ function updateBoard(){
     // Clear our board
     for(let i = 0; i < BOARD_SIZE; i++){
         for(let j = 0; j < BOARD_SIZE; j++){
-            board.grid[i][j] = 0;
+            board.grid[i][j].value = null;
         }
     }
     // Update the board with the position of our snake
     snake.forEach((segment) => {
-        board.grid[segment.y][segment.x] = SNAKE_BODY;
+        board.grid[segment.y][segment.x].value = SNAKE_BODY;
     })
     // Update the board with the position of our apple
-    board.grid[apple.y][apple.x] = APPLE_CELL;
-}
-
-/**
- * Function to print the board out. This printBoard function will be a little more elaborate than that of 2048.
- * 
- * REMOVE THIS FUNCTION. This will now be a method of the board class.
- * 
- * The board should be boxed in with dashes on the top and bottom, and `|` on the sides, forming a box around the board
- * This is important, since if the snake touches a wall, the game should end. 
- * 
- * Furthermore, instead of printing out '0', replace empty cells with " " instead. 
- * This is so the visibility of the snake is more clear.
- * 
- * Finally, each cell on the board is going to be separated by a " " in between. This is again to improve visibility.
- */
-function printBoard() {
-    // Uncomment the next line to run a smoother game:
-    // console.clear();
-    // This will provide the top dashed line to our board
-    console.log("--".repeat(BOARD_SIZE + 1))
-    for(let i = 0; i < BOARD_SIZE; i++){
-        let rowStr = "| ";
-        for(let j = 0; j < BOARD_SIZE; j++){
-            // If the cell is empty, we'll leave a space for visibility
-            rowStr += board.grid[i][j] == 0 ? " " : board.grid[i][j];
-            // This extra space will make our board less compact
-            rowStr += " ";
-        }
-        rowStr += "|"
-        console.log(rowStr);
-    }
-    console.log("--".repeat(BOARD_SIZE + 1));
+    board.grid[apple.y][apple.x].value = APPLE_CELL;
 }
 
 /**
@@ -129,14 +99,14 @@ function printBoard() {
 function generateRandomApple(){
     // Remove the apple if one exists. This prevents us from having multiple apples on our board
     if(apple){
-        board.grid[apple.y][apple.x] = EMPTY_CELL;
+        board.grid[apple.y][apple.x].value = null;
         apple = null;
     }
     // Finding all the empty cells in the board
     let emptyCells = [];
     for(let y = 0; y < BOARD_SIZE; y++){
         for(let x = 0; x < BOARD_SIZE; x++){
-            if(board.grid[y][x] === 0){
+            if(board.grid[y][x].value === null){
                 let coordinate = {
                     x: x,
                     y: y
@@ -197,7 +167,7 @@ function getMove() {
 
         // Otherwise, we just continue as normal.
         updateBoard();
-        printBoard();
+        board.printBoard();
         getMove();
     })
 }
@@ -366,7 +336,7 @@ function main(){
     initializeBoard();
     generateRandomApple();
     updateBoard();
-    printBoard();
+    board.printBoard();
     getMove();
 }
 

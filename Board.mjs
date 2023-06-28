@@ -16,7 +16,7 @@ export default class Board{
         for(let i = 0; i < this.#boardSize; i++){
             let row = [];
             for(let j = 0; j < this.#boardSize; j++){
-                row.push(0);
+                row.push(new Cell(j, i));
             }
             this.#grid.push(row);
         }
@@ -49,7 +49,7 @@ export default class Board{
             let rowStr = "| ";
             for(let j = 0; j < this.#boardSize; j++){
                 // If the cell is empty, we'll leave a space for visibility
-                rowStr += this.#grid[i][j] == 0 ? " " : this.#grid[i][j];
+                rowStr += this.#grid[i][j].value === null ? " " : this.#grid[i][j].value;
                 // This extra space will make our board less compact
                 rowStr += " ";
             }

@@ -1,22 +1,24 @@
 export default class Cell {
     #x;
     #y;
+    // initial value is null otherwise it will be undefined
     #value = null;
 
     constructor(x, y){
-        // Your code here
+        this.#x = x;
+        this.#y = y;
     }
 
     get x(){
-        // Your code here
+        return this.#x;
     }
 
     get y(){
-        // Your code here
+        return this.#y;
     }
 
     get value(){
-        // Your code here
+        return this.#value;
     }
 
     /**
@@ -24,6 +26,6 @@ export default class Cell {
      * Remember that when you set this value, you must keep the new value's X and Y in sync.
      */
     set value(value){
-        // Your code here
+        this.#value = value;
     }
 }
