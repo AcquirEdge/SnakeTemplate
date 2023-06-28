@@ -27,5 +27,9 @@ export default class Cell {
      */
     set value(value){
         this.#value = value;
+        if(value !== null){
+            this.#value.x = this.#x;
+            this.#value.y = this.#y;
+        }
     }
 }

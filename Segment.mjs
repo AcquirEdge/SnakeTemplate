@@ -11,31 +11,33 @@ export default class Segment{
      * @param {*} head - Property to know if this is the head Segment or not
      */
     constructor (x, y, head = false) {
-        // Your code here
+        this.#x = x;
+        this.#y = y;
+        this.#head = head;
     }
 
     get value(){
-        // Your code here
+        return this.#value;
     }
 
     get head(){
-        // Your code here
+        return this.#head;
     }
 
     get x(){
-        // Your code here
+        return this.#x;
     }
 
     set x(value){
-        // Your code here
+        this.#x = value;
     }
 
     get y(){
-        // Your code here
+        return this.#y;
     }
 
     set y(value){
-        // Your code here
+        this.#y = value;
     }
 
     /**
@@ -44,6 +46,6 @@ export default class Segment{
      * @returns - New Segment object that is an exact copy of this Segment.
      */
     clone(){
-        // Your code here
+        return new Segment(this.#x, this.#y);
     }
 }

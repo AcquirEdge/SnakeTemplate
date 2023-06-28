@@ -9,26 +9,27 @@ export default class Apple{
      * @param {Number} y - Y coordinate of the Apple
      */
     constructor (x, y) {
-        // Your code here
+        this.#x = x;
+        this.#y = y;
     }
 
     get x() {
-        // Your code here
+        return this.#x;
     }
 
     set x(value) {
-        // Your code here
+        this.#x = value;
     }
  
     get y() {
-        // Your code here
+        return this.#y;
     }
 
     set y(value) {
-        // Your code here
+        this.#y = value;
     }
 
     get value(){
-        // Your code here
+        return this.#value;
     }
 }

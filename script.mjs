@@ -44,9 +44,9 @@ function initializeBoard() {
     const centerY = Math.floor(BOARD_SIZE / 2);
 
     // Since direction starts off as left, the snake should be facing left
-    let head = { x: centerX, y: centerY };
-    let snakeSegment1 = { x: centerX + 1, y: centerY };
-    let snakeSegment2 = { x: centerX + 2, y: centerY };
+    let head = new Segment(centerX, centerY, true);
+    let snakeSegment1 = new Segment(centerX + 1, centerY);
+    let snakeSegment2 = new Segment(centerX + 2, centerY);
     snake = [ head, snakeSegment1, snakeSegment2 ]
 }
 
@@ -75,10 +75,10 @@ function updateBoard(){
     }
     // Update the board with the position of our snake
     snake.forEach((segment) => {
-        board.grid[segment.y][segment.x].value = SNAKE_BODY;
+        board.grid[segment.y][segment.x].value = segment;
     })
     // Update the board with the position of our apple
-    board.grid[apple.y][apple.x].value = APPLE_CELL;
+    board.grid[apple.y][apple.x].value = apple;
 }
 
 /**
@@ -118,8 +118,8 @@ function generateRandomApple(){
     // Choose a random cell 
     if(emptyCells.length > 0){
         let randomCellIndex = Math.floor(Math.random() * emptyCells.length);
-        let randomCellCoordiante = emptyCells[randomCellIndex];
-        apple = randomCellCoordiante;
+        let randomCellCoordinate = emptyCells[randomCellIndex];
+        apple = new Apple(randomCellCoordinate.x, randomCellCoordinate.y);
     }
     // Since we made a change to the apple, we update the board;
     updateBoard();
@@ -266,12 +266,12 @@ function moveSnake() {
     // Declare a temporary variable "lastMoved" that holds the last segment that has moved. The initial value will be the head of the snake.
     //      Reason: Once a segment moves, we need to keep track of where it was, or else the next segment doesn't know where to go to.
     //              Furthermore, after the snake finishes moving, this will hold the segment to be appended if the snake eats an apple.
-    let lastMoved = { ... snake[0] };
+    let lastMoved = snake[0].clone();
     // Depending on the current direction, adjust the snake head segment's x and y value. You may need to use a switch statement here
     // For each segment:
     for(let i = 0; i < snake.length; i++){
         // If it is the first segment (head of the snake):
-        if(i === 0){
+        if(snake[i].head){
             let newX = snake[i].x;
             let newY = snake[i].y;
             // use a switch statement to adjust the head segment's x and y value.
@@ -294,7 +294,7 @@ function moveSnake() {
         // Otherwise
         } else {
             // Declare a temporary variable "tempCopy" to hold a copy of the current segment.
-            let tempCopy = { ... snake[i] };
+            let tempCopy = snake[i].clone();
             // Set the current segment equal to "lastMoved". This essentially moves the segment forward.
             snake[i] = lastMoved;
             // Set "lastMoved" equal to "tempCopy". Thus, "lastMoved" now holds a temporary copy of the segment that just moved.
