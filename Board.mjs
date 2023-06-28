@@ -1,7 +1,7 @@
 import Cell from "./Cell.mjs";
 
 export default class Board{
-    #grid;
+    #grid = [];
     #boardSize;
 
     /**
@@ -12,16 +12,22 @@ export default class Board{
      * @param {Number} size - The size of our board
      */
     constructor(size){
-        // Your code here.
+        this.#boardSize = size;
+        for(let i = 0; i < this.#boardSize; i++){
+            let row = [];
+            for(let j = 0; j < this.#boardSize; j++){
+                row.push(0);
+            }
+            this.#grid.push(row);
+        }
     }
 
     /**
      * Getter function for the board's grid
      */
     get grid() {
-        // Your code here
+        return this.#grid;
     }
-
 
     /**
      * Method to print the board out. This printBoard method will be a little more elaborate than that of 2048.
@@ -35,9 +41,21 @@ export default class Board{
      * Finally, each cell on the board is going to be separated by a " " in between. This is again to improve visibility.
      * 
      * ALTERATIONS:
-     * - Make sure to check if the grid value is null instead of equal to 0
+     * - Make sure to check if the grid value is null instead of equal to
      */
     printBoard() {
-        // Your code here
+        console.log("--".repeat(this.#boardSize + 1))
+        for(let i = 0; i < this.#boardSize; i++){
+            let rowStr = "| ";
+            for(let j = 0; j < this.#boardSize; j++){
+                // If the cell is empty, we'll leave a space for visibility
+                rowStr += this.#grid[i][j] == 0 ? " " : this.#grid[i][j];
+                // This extra space will make our board less compact
+                rowStr += " ";
+            }
+            rowStr += "|"
+            console.log(rowStr);
+        }
+        console.log("--".repeat(this.#boardSize + 1));
     }
 }

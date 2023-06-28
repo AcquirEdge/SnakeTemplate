@@ -3,7 +3,7 @@ import Board from "./Board.mjs";
 import Apple from "./Apple.mjs";
 
 // ALTERATIONS: Use 'import' instead of 'require' since we are now in a '.mjs' file
-const readline = require('readline');
+import readline from 'readline';
 let rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -16,9 +16,12 @@ const SNAKE_BODY = "X";
 const APPLE_CELL = "A";
 const BOARD_SIZE = 20;
 
-// ALTERATION: board is now a new Board object instead of an empty array
-let board = [];
-let direction;
+// ALTERATIONs: 
+// - board is now a new Board object instead of an empty array
+// - direction is set to an initial value of "left"
+
+let board = new Board(BOARD_SIZE);
+let direction = "left";
 
 // We need these global variables to help us keep track of where the snake and apple are at all times
 let snake = [];
@@ -31,19 +34,9 @@ let apple;
  * ALTERATIONS:
  * - EDIT THIS function so that it no longer fills the board with non-null values.
  * - Your Board class constructor will take care of this.
- *  -Alter this function to utilize the Segment class.
+ * - Alter this function to utilize the Segment class.
  */
 function initializeBoard() {
-    // Fill our board up with 0s before we begin with the snake
-    direction = "left";
-    for(let i = 0; i < BOARD_SIZE; i++){
-        let row = [];
-        for(let j = 0; j < BOARD_SIZE; j++){
-            row.push(EMPTY_CELL);
-        }
-        board.push(row);
-    }
-
     // Get the starting coordinate values for our snake;
     const centerX = Math.floor(BOARD_SIZE / 2);
     const centerY = Math.floor(BOARD_SIZE / 2);
@@ -75,15 +68,15 @@ function updateBoard(){
     // Clear our board
     for(let i = 0; i < BOARD_SIZE; i++){
         for(let j = 0; j < BOARD_SIZE; j++){
-            board[i][j] = 0;
+            board.grid[i][j] = 0;
         }
     }
     // Update the board with the position of our snake
     snake.forEach((segment) => {
-        board[segment.y][segment.x] = SNAKE_BODY;
+        board.grid[segment.y][segment.x] = SNAKE_BODY;
     })
     // Update the board with the position of our apple
-    board[apple.y][apple.x] = APPLE_CELL;
+    board.grid[apple.y][apple.x] = APPLE_CELL;
 }
 
 /**
@@ -108,7 +101,7 @@ function printBoard() {
         let rowStr = "| ";
         for(let j = 0; j < BOARD_SIZE; j++){
             // If the cell is empty, we'll leave a space for visibility
-            rowStr += board[i][j] == 0 ? " " : board[i][j];
+            rowStr += board.grid[i][j] == 0 ? " " : board.grid[i][j];
             // This extra space will make our board less compact
             rowStr += " ";
         }
@@ -136,14 +129,14 @@ function printBoard() {
 function generateRandomApple(){
     // Remove the apple if one exists. This prevents us from having multiple apples on our board
     if(apple){
-        board[apple.y][apple.x] = EMPTY_CELL;
+        board.grid[apple.y][apple.x] = EMPTY_CELL;
         apple = null;
     }
     // Finding all the empty cells in the board
     let emptyCells = [];
     for(let y = 0; y < BOARD_SIZE; y++){
         for(let x = 0; x < BOARD_SIZE; x++){
-            if(board[y][x] === 0){
+            if(board.grid[y][x] === 0){
                 let coordinate = {
                     x: x,
                     y: y
