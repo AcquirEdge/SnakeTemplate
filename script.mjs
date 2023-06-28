@@ -11,8 +11,6 @@ let rl = readline.createInterface({
 
 // Define Constants and Global Variables
 // ALTERATIONS: Remove all but board size
-const SNAKE_BODY = "X";
-const APPLE_CELL = "A";
 const BOARD_SIZE = 20;
 
 // ALTERATIONs: 
