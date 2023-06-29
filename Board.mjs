@@ -1,6 +1,8 @@
 import Cell from "./Cell.mjs";
 
 export default class Board{
+    // ALTERATIONS: 
+    // - Add a new private property '#boardElement'
     #grid = [];
     #boardSize;
 
@@ -8,7 +10,13 @@ export default class Board{
      * This is a function to construct a new Board object.
      * The board should be initialized with all empty cells.
      * 
+     * ALTERATIONS
+     * - The constructor takes a new argument 'boardElement'
+     * - set private property #boardElement to boardElement
+     * - Set the board element's CSS property --board-size to the size of the board
+     * - For each cell, create a new Cell element and append it to the board Element
      * 
+     * @param {Element} boardElement - The HTML Element associated with the board
      * @param {Number} size - The size of our board
      */
     constructor(size){
@@ -16,6 +24,7 @@ export default class Board{
         for(let i = 0; i < this.#boardSize; i++){
             let row = [];
             for(let j = 0; j < this.#boardSize; j++){
+                // Create new Cell Elements here to append to the board Element
                 // remember that j is the x value and i is the y
                 row.push(new Cell(j, i));
             }
@@ -31,6 +40,13 @@ export default class Board{
     }
 
     /**
+     * Getter function for the board's HTML element
+     */
+        get boardElement() {
+            // Your code here
+        }
+
+    /**
      * Method to print the board out. This printBoard method will be a little more elaborate than that of 2048.
      * 
      * The board should be boxed in with dashes on the top and bottom, and `|` on the sides, forming a box around the board
@@ -42,7 +58,7 @@ export default class Board{
      * Finally, each cell on the board is going to be separated by a " " in between. This is again to improve visibility.
      * 
      * ALTERATIONS:
-     * - Make sure to check if the grid value is null instead of equal to
+     * - Comment this out. We don't need this unless it's for debugging.
      */
     printBoard() {
         console.log("--".repeat(this.#boardSize + 1))
