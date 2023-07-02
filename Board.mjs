@@ -5,6 +5,7 @@ export default class Board{
     // - Add a new private property '#boardElement'
     #grid = [];
     #boardSize;
+    #boardElement;
 
     /**
      * This is a function to construct a new Board object.
@@ -19,12 +20,16 @@ export default class Board{
      * @param {Element} boardElement - The HTML Element associated with the board
      * @param {Number} size - The size of our board
      */
-    constructor(size){
+    constructor(boardElement, size){
         this.#boardSize = size;
+            this.#boardElement = boardElement;
+            this.#boardElement.style.setProperty("--board-size", size);
         for(let i = 0; i < this.#boardSize; i++){
             let row = [];
             for(let j = 0; j < this.#boardSize; j++){
-                // Create new Cell Elements here to append to the board Element
+                let cellElement = document.createElement("div");
+                cellElement.classList.add("cell");
+                this.#boardElement.appendChild(cellElement);
                 // remember that j is the x value and i is the y
                 row.push(new Cell(j, i));
             }
@@ -43,7 +48,7 @@ export default class Board{
      * Getter function for the board's HTML element
      */
         get boardElement() {
-            // Your code here
+            return this.#boardElement;
         }
 
     /**
@@ -60,19 +65,19 @@ export default class Board{
      * ALTERATIONS:
      * - Comment this out. We don't need this unless it's for debugging.
      */
-    printBoard() {
-        console.log("--".repeat(this.#boardSize + 1))
-        for(let i = 0; i < this.#boardSize; i++){
-            let rowStr = "| ";
-            for(let j = 0; j < this.#boardSize; j++){
-                // If the cell is empty, we'll leave a space for visibility
-                rowStr += this.#grid[i][j].value === null ? " " : this.#grid[i][j].value.value;
-                // This extra space will make our board less compact
-                rowStr += " ";
-            }
-            rowStr += "|"
-            console.log(rowStr);
-        }
-        console.log("--".repeat(this.#boardSize + 1));
-    }
+    // printBoard() {
+    //     console.log("--".repeat(this.#boardSize + 1))
+    //     for(let i = 0; i < this.#boardSize; i++){
+    //         let rowStr = "| ";
+    //         for(let j = 0; j < this.#boardSize; j++){
+    //             // If the cell is empty, we'll leave a space for visibility
+    //             rowStr += this.#grid[i][j].value === null ? " " : this.#grid[i][j].value.value;
+    //             // This extra space will make our board less compact
+    //             rowStr += " ";
+    //         }
+    //         rowStr += "|"
+    //         console.log(rowStr);
+    //     }
+    //     console.log("--".repeat(this.#boardSize + 1));
+    // }
 }
