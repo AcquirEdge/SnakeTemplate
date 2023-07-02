@@ -17,9 +17,14 @@ export default class Apple{
      * @param {Number} x - X coordinate of the Apple
      * @param {Number} y - Y coordinate of the Apple
      */
-    constructor (x, y) {
+    constructor (boardElement, x, y) {
         this.#x = x;
         this.#y = y;
+        this.#appleElement = document.createElement("div");
+        this.#appleElement.classList.add("apple");
+        this.#appleElement.style.setProperty("--y", y);
+        this.#appleElement.style.setProperty("--x", x);
+        boardElement.append(this.#appleElement);
     }
 
     get x() {
