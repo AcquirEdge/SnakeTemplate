@@ -47,9 +47,9 @@ export default class Board{
     /**
      * Getter function for the board's HTML element
      */
-        get boardElement() {
-            return this.#boardElement;
-        }
+    get boardElement() {
+        return this.#boardElement;
+    }
 
     /**
      * Method to print the board out. This printBoard method will be a little more elaborate than that of 2048.

@@ -4,11 +4,6 @@ import Apple from "./Apple.mjs";
 
 // ALTERATIONS:
 // - Remove readline
-import readline from 'readline';
-let rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-})
 
 // Define Constants and Global Variables
 const BOARD_SIZE = 20;
@@ -16,7 +11,7 @@ const BOARD_SIZE = 20;
 // ALTERATIONs: 
 // - board should be initialized with an Element with 'id' value "board"
 
-let board = new Board(BOARD_SIZE);
+let board = new Board(document.getElementById("board"), BOARD_SIZE);
 let direction;
 
 // We need these global variables to help us keep track of where the snake and apple are at all times
@@ -39,9 +34,9 @@ function initializeBoard() {
     const centerY = Math.floor(BOARD_SIZE / 2);
 
     // Since direction starts off as left, the snake should be facing left
-    let head = new Segment(centerX, centerY, true);
-    let snakeSegment1 = new Segment(centerX + 1, centerY);
-    let snakeSegment2 = new Segment(centerX + 2, centerY);
+    let head = new Segment(board.boardElement, centerX, centerY, true);
+    let snakeSegment1 = new Segment(board.boardElement, centerX + 1, centerY);
+    let snakeSegment2 = new Segment(board.boardElement, centerX + 2, centerY);
     snake = [ head, snakeSegment1, snakeSegment2 ]
 }
 
@@ -88,8 +83,8 @@ function updateBoard(){
 function generateRandomApple(){
     // Remove the apple if one exists. This prevents us from having multiple apples on our board
     if(apple){
-        board.grid[apple.y][apple.x].value = null;
-        apple = null;
+        apple.remove();
+        apple = null;  
     }
     // Finding all the empty cells in the board
     let emptyCells = [];
@@ -108,64 +103,17 @@ function generateRandomApple(){
     if(emptyCells.length > 0){
         let randomCellIndex = Math.floor(Math.random() * emptyCells.length);
         let randomCellCoordinate = emptyCells[randomCellIndex];
-        apple = new Apple(randomCellCoordinate.x, randomCellCoordinate.y);
+        apple = new Apple(board.boardElement, randomCellCoordinate.x, randomCellCoordinate.y);
     }
     // Since we made a change to the apple, we update the board;
     updateBoard();
 }
 
 /**
- * Function to help us retrieve and take care of the user's next move 
- * 
- * Make sure to import the 'readline' library and create an interface first
- * 
- * I've provided some guiding comments to help direct you in the correct direction
- * 
- * Adjust getMove to now accommodate for our new moveSnake() function:
- * 
- * After moving the snake:
- * 
- * If the snake landed on an apple, update the board and generate a new apple
- * If the snake was bitten or runs into a wall, Print out "Loss", close the readline interface, and return
- * Otherwise, don't do anything.
- * 
- * ALTERATIONS:
- * - Remove this function and replace the logic in the new functions below: setupInput() and handleInput()
- * 
- */
-function getMove() {
-    // use readline's interface to ask retrieve the user's next move
-    rl.question("Input your next move (up, down, left, right, or nothing to move the snake forward): ", (answer) => {
-        // Depending on the user's answer, we change the snake's direction
-        changeDirection(answer);
-        
-        // Move the snake forward and save the result
-        let result = moveSnake();
-
-        // If the snake lands on an apple, update board and generate a new apple
-        if(result === "apple"){
-            updateBoard();
-            generateRandomApple();
-        }
-        // Else, if the snake bites itself or runs into a wall, print out "Loss"
-        else if(result === "bite" || result === "wall"){
-            console.log("LOSS");
-            rl.close();
-            return;
-        }
-
-        // Otherwise, we just continue as normal.
-        updateBoard();
-        board.printBoard();
-        getMove();
-    })
-}
-
-/**
  * Function to set up a new Event Listener in the document
  */
 function setupInput(){
-    // Your code here
+    document.addEventListener("keydown", handleInput, {once: true});
 }
 
 /**
@@ -179,7 +127,37 @@ function setupInput(){
  * @param {Event} e - The Event Object passed to the event handler function
  */
 function handleInput(e){
-    // Your code here
+    switch(e.key){
+        case 'ArrowLeft':
+            changeDirection("left");
+            break;
+        case 'ArrowRight':
+            changeDirection("right");
+            break;
+        case 'ArrowUp':
+            changeDirection("up");
+            break;
+        case 'ArrowDown':
+            changeDirection("down");
+            break;
+    }
+    // Move the snake forward and save the result
+    let result = moveSnake();
+
+    // If the snake lands on an apple, update board and generate a new apple
+    if(result === "apple"){
+        updateBoard();
+        generateRandomApple();
+    }
+    // Else, if the snake bites itself or runs into a wall, print out "Loss"
+    else if(result === "bite" || result === "wall"){
+        alert("LOSS");
+        return;
+    }
+
+    // Otherwise, we just continue as normal.
+    updateBoard();
+    setupInput();
 }
 
 /**
@@ -286,13 +264,12 @@ function changeDirection(newDir){
 function moveSnake() {
     // Declare our return variable "result" and give it a default value of "continue".
     let result = "continue";
-    
-    // ALTER THIS TO 'lastMovedX' and 'lastMovedY' which saves the x and y value of the snake's head
-    let lastMoved = snake[0].clone();
-
-    // Add an additional variable here 'lastSegment' which saves a clone of the snake's last Segment
-    // Your Code Here
-
+    // Declare a temporary variable "lastMoved" that holds the last segment that has moved. The initial value will be the head of the snake.
+    //      Reason: Once a segment moves, we need to keep track of where it was, or else the next segment doesn't know where to go to.
+    //              Furthermore, after the snake finishes moving, this will hold the segment to be appended if the snake eats an apple.
+    let lastSegment = snake[snake.length - 1].clone();
+    let lastMovedX = snake[0].x;
+    let lastMovedY = snake[0].y;
     // Depending on the current direction, adjust the snake head segment's x and y value. You may need to use a switch statement here
     // For each segment:
     for(let i = 0; i < snake.length; i++){
@@ -319,24 +296,27 @@ function moveSnake() {
             snake[i].y = newY;
         // Otherwise
         } else {
-            // ALTER THIS ACCORDING TO THE NEW COMMENTS
-            // Declare temporary variables "tempCopyX" and "tempCopyY" to hold copies of the current Segment's x and y properties.
-            let tempCopy = snake[i].clone();
-            // Set the current Segment's 'x' and 'y' to 'lastMovedX' and 'lastMovedY'. This moves the segment forward.
-            snake[i] = lastMoved;
-            // Set "lastMovedX" equal to "tempCopyX" and "lastMovedY" equal to "tempCopyX". Thus, "lastMoved" now holds a temporary copy of the segment that just moved.
-            lastMoved = tempCopy;
+            // Declare a temporary variable "tempCopy" to hold a copy of the current segment's .
+            let tempCopyX = snake[i].x;
+            let tempCopyY = snake[i].y;
+            // Set the current segment equal to "lastMoved". This essentially moves the segment forward.
+            snake[i].x = lastMovedX;
+            snake[i].y = lastMovedY;
+            // Set "lastMoved" equal to "tempCopy". Thus, "lastMoved" now holds a temporary copy of the segment that just moved.
+            lastMovedX = tempCopyX;
+            lastMovedY = tempCopyY;
         }
     }
     // If the snake's head has the same coordinates as the apple (We can't use the board to check it since the board can only hold one value at a time)
     if(snake[0].x === apple.x && snake[0].y === apple.y){
         // Set "result" to "apple"
         result = "apple";
-        // ALTERATION: Push "lastSegment" to the end of the snake array
-        snake.push(lastMoved);
-    // If the snake hasn't landed on an apple, then remove 'lastSegment'
+        // Push "lastMoved" to the end of the snake array
+        snake.push(lastSegment);
+        // return the result here so that the function ends early. 
+    // Else 
     } else {
-        // call the 'remove' method of 'lastSegment'
+        lastSegment.remove();
     }
     // if the snake's head has coordinates that exceed our board
     if(snake[0].x < 0 || snake[0].x >= BOARD_SIZE || snake[0].y < 0 || snake[0].y >= BOARD_SIZE) {
@@ -368,8 +348,7 @@ function main(){
     initializeBoard();
     generateRandomApple();
     updateBoard();
-    board.printBoard();
-    getMove();
+    setupInput();
 }
 
 main();

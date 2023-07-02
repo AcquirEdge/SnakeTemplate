@@ -3,6 +3,7 @@ export default class Apple{
     #x;
     #y;
     #value = "A";
+    #appleElement;
 
     /**
      * 

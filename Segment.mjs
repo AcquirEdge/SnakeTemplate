@@ -23,7 +23,7 @@ export default class Segment{
      * @param {Number} y - Y coordinate of this snake Segment
      * @param {Boolean} head - Property to know if this is the head Segment or not
      */
-    constructor (x, y, head = false) {
+    constructor (boardElement, x, y, head = false) {
         this.#x = x;
         this.#y = y;
         this.#head = head;
