@@ -34,6 +34,7 @@ export default class Apple{
     // ALTERATION: When you set the x, make sure you update the CSS "--x" property
     set x(value) {
         this.#x = value;
+        this.#appleElement.style.setProperty("--x", value);
     }
  
     get y() {
@@ -43,6 +44,7 @@ export default class Apple{
     // ALTERATION: When you set the y, make sure you update the CSS "--y" property
     set y(value) {
         this.#y = value;
+        this.#appleElement.style.setProperty("--y", value);
     }
 
     get value(){
@@ -53,6 +55,6 @@ export default class Apple{
      * Function to remove the apple Element from the DOM
      */
     remove(){
-        // Your code here
+        this.#appleElement.remove();
     }
 }

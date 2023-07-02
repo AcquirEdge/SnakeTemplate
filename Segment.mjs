@@ -7,6 +7,8 @@ export default class Segment{
     #y;
     #head;
     #value = "X";
+    #segmentElement;
+    #boardElement; 
     /**
      * ALTERATIONS:
      * - constructor takes a new argument 'boardElement'
@@ -25,7 +27,15 @@ export default class Segment{
         this.#x = x;
         this.#y = y;
         this.#head = head;
-        // Add alteration code here
+        this.#boardElement = boardElement;
+        this.#segmentElement = document.createElement("div");
+        this.#segmentElement.classList.add("segment");
+        if(head){
+            this.#segmentElement.classList.add("head");
+        }
+        this.#segmentElement.style.setProperty("--y", y);
+        this.#segmentElement.style.setProperty("--x", x);
+        boardElement.append(this.#segmentElement);
     }
 
     get value(){
@@ -43,6 +53,7 @@ export default class Segment{
     // ALTERATION: When you set the x, make sure you update the CSS "--x" property
     set x(value){
         this.#x = value;
+        this.#segmentElement.style.setProperty("--x", value);
     }
 
     get y(){
@@ -52,13 +63,14 @@ export default class Segment{
     // ALTERATION: When you set the y, make sure you update the CSS "--y" property
     set y(value){
         this.#y = value;
+        this.#segmentElement.style.setProperty("--y", value);
     }
 
     /**
      * Function to remove the segment Element from the DOM
      */
     remove() {
-        // Your code here
+        this.#segmentElement.remove();
     }
 
     /**
@@ -70,6 +82,6 @@ export default class Segment{
      * @returns - New Segment object that is an exact copy of this Segment.
      */
     clone(){
-        return new Segment(this.#x, this.#y);
+        return new Segment(this.#boardElement, this.#x, this.#y);
     }
 }
