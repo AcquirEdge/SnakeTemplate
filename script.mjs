@@ -66,8 +66,6 @@ function updateBoard(){
  * This means that in order to generate a new apple, you must either make sure that the apple is removed beforehand.
  * 
  * Instead of directly updating the board, we're going to utilize our updateBoard function to do so when we generate a new Apple
- * 
- * 
  */
 function generateRandomApple(){
     // Remove the apple if one exists. This prevents us from having multiple apples on our board
@@ -108,11 +106,14 @@ function setupInput(){
 /**
  * Event handler function to handle what happens when a user presses an arrow key
  * 
- * There are some differences from getMove():
- * - We no longer need to print out the board
- * - We are no longer using readline, so we cna get rid of rl.close()
- * - Use setupInput() for the recursive call isntead of getMove()
- * - Use 'alert' instead of 'console.log' to end the game.
+ * ALTERATIONS:
+ * - We no longer need to handle moving the snake and checking the game status here.
+ * - Move the parts associated with that to "tick()"
+ * 
+ * The reason we no longer handle moving the snake and checking the game status is because
+ * changing the snake's direction happens asynchronously. If we do not press any buttons, we want the
+ * snake to continue moving forward. 
+ * 
  * @param {Event} e - The Event Object passed to the event handler function
  */
 function handleInput(e){
@@ -132,7 +133,6 @@ function handleInput(e){
     }
     // Move the snake forward and save the result
     let result = moveSnake();
-
     // If the snake lands on an apple, update board and generate a new apple
     if(result === "apple"){
         updateBoard();
@@ -143,7 +143,6 @@ function handleInput(e){
         alert("LOSS");
         return;
     }
-
     // Otherwise, we just continue as normal.
     updateBoard();
     setupInput();
@@ -310,15 +309,35 @@ function moveSnake() {
 }
 
 /**
+ * Tick function to signifiy one single game tick.
+ * 
+ * @returns {Boolean} - Returns 'false' when the game is over
+ */
+function tick() {
+    // Your code here
+}
+
+/**
  * Main function to run our game.
  * Place all the functions necessary to run the game (so far) into this function
  * 
+ * The setInterval() function is an asychronous function that repeats a callback function
+ * every given number of milliseconds. We pass it the tick function so that it moves the snake
+ * forward every number of milliseconds. When 'tick()' finally returns false, signifying the game has ended,
+ * we run 'clearInterval()', which will stop the 'setInterval()' function.
+ * 
+ * The higher you set the milliseconds in 'setInterval', the slower the snake goes, and vice versa.
  */
 function main(){
     initializeBoard();
     generateRandomApple();
     updateBoard();
     setupInput();
+    let game = setInterval(() => {
+        if(tick() === false){
+            clearInterval(game);
+        }
+    }, 200)
 }
 
 main();
