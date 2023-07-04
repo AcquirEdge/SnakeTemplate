@@ -1,8 +1,6 @@
 import Cell from "./Cell.mjs";
 
 export default class Board{
-    // ALTERATIONS: 
-    // - Add a new private property '#boardElement'
     #grid = [];
     #boardSize;
     #boardElement;
@@ -11,11 +9,6 @@ export default class Board{
      * This is a function to construct a new Board object.
      * The board should be initialized with all empty cells.
      * 
-     * ALTERATIONS
-     * - The constructor takes a new argument 'boardElement'
-     * - set private property #boardElement to boardElement
-     * - Set the board element's CSS property --board-size to the size of the board
-     * - For each cell, create a new Cell element and append it to the board Element
      * 
      * @param {Element} boardElement - The HTML Element associated with the board
      * @param {Number} size - The size of our board
@@ -62,8 +55,6 @@ export default class Board{
      * 
      * Finally, each cell on the board is going to be separated by a " " in between. This is again to improve visibility.
      * 
-     * ALTERATIONS:
-     * - Comment this out. We don't need this unless it's for debugging.
      */
     // printBoard() {
     //     console.log("--".repeat(this.#boardSize + 1))

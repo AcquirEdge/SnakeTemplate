@@ -2,14 +2,8 @@ import Segment from "./Segment.mjs";
 import Board from "./Board.mjs";
 import Apple from "./Apple.mjs";
 
-// ALTERATIONS:
-// - Remove readline
-
 // Define Constants and Global Variables
 const BOARD_SIZE = 20;
-
-// ALTERATIONs: 
-// - board should be initialized with an Element with 'id' value "board"
 
 let board = new Board(document.getElementById("board"), BOARD_SIZE);
 let direction;
@@ -22,8 +16,6 @@ let apple;
 /**
  * Function to initialize our board to the initial position
  * 
- * ALTERATIONS:
- * - Whenever we create Segments, we have to pass it the boardElement
  */
 function initializeBoard() {
     // Set initial direction to left
@@ -75,9 +67,6 @@ function updateBoard(){
  * 
  * Instead of directly updating the board, we're going to utilize our updateBoard function to do so when we generate a new Apple
  * 
- * ALTERATIONS:
- * - We have to remove the apple element instead of just setting it to null
- * - We have to pass the board HTML element to the Apple when we create a new one
  * 
  */
 function generateRandomApple(){
@@ -237,22 +226,6 @@ function changeDirection(newDir){
  * So our function flow is going to look like this:
  * Move the head of the snake > Make all the other segments follow > We check the state of the game, and return the corresponding value.
  * 
- * ALTERATIONS: 
- * With the addition of Elements for game graphics, we need to do logical refactoring in our moveSnake logic.
- * Previously, in order to move the snake forward, we create temporary variables to change which Segment objects our 'snake' array refers to.
- * Unfortunately, with us introducing HTML Elements and graphics to this, we now have to keep the same references in our 'snake' array.
- *      This is because every time we create a new 'Segment' class instance, we are also creating a new HTML Element on the browser, which is excessive.
- * Instead, we have to alter the 'x' and 'y' properties of our Segment instances in order to change where they appear in the web page.
- *      Remember, that since the 'x' and 'y' properties of our Segment instances are connected to CSS, they will move as we change the property values.
- * The logical changes below will help us accomplish this:
- * Alter how we move snake segments forwards:
- * - Instead of initializing lastMoved as a clone, we will instead initialize 2 variables: 'lastMovedX' and 'lastMovedY'.
- * - When we move a single segment forwards, 'tempCopy' will also follow the same format: turning into 'tempCopyX' and 'tempCopyY'.
- * - This way, we are not creating an excessive amount of HTML elements that will linger on our board if we do not 'remove()' them.
- * Alter how we add a segment when the snake eats an apple:
- * - Initialize a new variable 'lastSegment' and initialize it as a clone of the last segment of the current snake.
- *      This segment will be appended to the snake if it ends up eating an apple
- *      If the snake does not eat an apple, we simply remove it. 
  * 
  * @returns {string} - The result of the move:
  *                  "apple": Snake ate an apple, 
@@ -340,9 +313,6 @@ function moveSnake() {
  * Main function to run our game.
  * Place all the functions necessary to run the game (so far) into this function
  * 
- * ALTERATIONS:
- * - We no longer need to print the board.
- * - We now use setupInput() instead of getMove()
  */
 function main(){
     initializeBoard();
